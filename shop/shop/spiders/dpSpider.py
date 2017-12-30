@@ -7,7 +7,7 @@ from shop.items import urlItem
 from scrapy.selector import Selector
 from time import time
 import re
-from shop.utils import get_domain
+from shop.utils import get_domain,list_get_safe
 
 class dpSpider(Spider):
     name='dpShop'
@@ -84,10 +84,32 @@ class dpSpider(Spider):
             url_item['url'] = next_page[0]
             url_item['target_type'] = 'div_category'
             url_item['last_parse_time'] = 0
-            print url_item
+            yield url_item
+        city=list_get_safe(Selector(text=text).xpath('//a[@class="city J-city"]/span/text()').extract())
         shop_list = Selector(text=text).xpath(u'//div[@id="shop-all-list"]/ul/li')
         for shop in shop_list:
-            pass
+            href=shop.xpath('./div/div[@class="tit"]/a/@href').extract()
+            p=re.compile('\/(\d+)$')
+            href=list_get_safe(href)
+            shop_id=list_get_safe(re.findall(p,href))
+            name=shop.xpath('./div/div[@class="tit"]/a/h4/text()').extract()
+            name=list_get_safe(name)
+            comment=shop.xpath('./div/div[@class="comment"]/span/@title').extract()
+            comment=list_get_safe(comment)
+            tag=shop.xpath('./div/div[@class="tag-addr"]/a/span[@class="tag"]/text()').extract()
+            type=list_get_safe(tag)
+            address=shop.xpath('./div/div[@class="tag-addr"]/span[@class="addr"]/text()').extract()
+            address=list_get_safe(address)
+            area=list_get_safe(tag,1)
+            comment_score=shop.xpath('./div/span[@class="comment-list"]/span/b/text()').extract()
+            taste=list_get_safe(comment_score,0,0)
+            environment=list_get_safe(comment_score,1,0)
+            service=list_get_safe(comment_score,2,0)
+            dishs=shop.xpath('./div/div[@class="recommend"]/a/text()').extract()
+            recommended_dish=reduce(lambda x,y:x+','+y,dishs)
+
+
+
 
     def parse(self,response):
         print '############'

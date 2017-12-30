@@ -40,6 +40,7 @@ class urlItem(myItem):
 class ShopItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    #city shop_id name comment type address area taste environment service recommended_dish
     pass
 
 createTable(urlItem.fields,urlItem.__name__)

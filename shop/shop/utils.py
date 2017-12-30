@@ -10,3 +10,9 @@ def get_domain(url):
         return re.findall(p,url)[0][0]
     except Exception,e:
         return ''
+
+def list_get_safe(l,n=0,default=''):
+    try:
+        return l[n]
+    except IndexError,e:
+        return default

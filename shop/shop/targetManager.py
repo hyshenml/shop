@@ -3,7 +3,7 @@ from db import MyDb
 class targetManager():
     @staticmethod
     def prepare_targets():
-        urls=query_url2()
+        urls=query_urls()
         res=[]
         for url_data in urls:
             t=target()
