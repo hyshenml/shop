@@ -17,7 +17,6 @@ class myItem(scrapy.Item):
 
         sql = 'insert into %s (%s) values(%s);' % (
         tableName, reduce(lambda x, y: x + ',' + y, colNames), reduce(lambda x, y: x + ',' + y, values))
-
         with MyDb() as conn:
             try:
                 cursor = conn.cursor()
@@ -34,13 +33,21 @@ class urlItem(myItem):
     target_type=scrapy.Field(type='VARCHAR(20)')
 
 
-
-
-
 class ShopItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    #city shop_id name comment type address area taste environment service recommended_dish
-    pass
+    city=scrapy.Field(type='VARCHAR(20)')
+    shop_id=scrapy.Field(type='VARCHAR(20)',pk=1)
+    name=scrapy.Field(type='VARCHAR(64)')
+    comment=scrapy.Field(type='VARCHAR(20)')
+    type=scrapy.Field(type='VARCHAR(20)')
+    address=scrapy.Field(type='VARCHAR(255)')
+    area=scrapy.Field(type='VARCHAR(20)')
+    taste=scrapy.Field(type='float')
+    environment=scrapy.Field(type='float')
+    service=scrapy.Field(type='float')
+    recommended_dish=scrapy.Field(type='VARCHAR(64)')
+
 
 createTable(urlItem.fields,urlItem.__name__)
+createTable(ShopItem.fields,ShopItem.__name__)

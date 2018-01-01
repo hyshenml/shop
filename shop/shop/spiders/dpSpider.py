@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from scrapy.spider import Spider
-from shop.targetManager import targetManager
+from shop.targetManager import targetManager,target
 from scrapy import Request
-from shop.items import urlItem
+from shop.items import urlItem,ShopItem
 from scrapy.selector import Selector
 from time import time
 import re
@@ -62,7 +62,7 @@ class dpSpider(Spider):
                 url_item['last_parse_time'] = 0
                 yield url_item
         except Exception,e:
-            print e
+            print 'err',e
 
     def parse_busi_div(self,response):
         sel=Selector(text=response.body).xpath('//div[@id="classfy" and @class="nc-items"]/a[@href]/@href').extract()
@@ -80,14 +80,16 @@ class dpSpider(Spider):
         next_page = Selector(text=text).xpath(u'//a[text()="下一页" and @class="next"]/@href').extract()
 
         if(len(next_page)>0):
-            url_item = urlItem()
-            url_item['url'] = next_page[0]
-            url_item['target_type'] = 'div_category'
-            url_item['last_parse_time'] = 0
-            yield url_item
+            t=target()
+            t.setType('div_category')
+            t.setUrl(next_page[0])
+            callback=self._router_(t)
+            yield Request(url=t.url, callback=callback)
+
         city=list_get_safe(Selector(text=text).xpath('//a[@class="city J-city"]/span/text()').extract())
         shop_list = Selector(text=text).xpath(u'//div[@id="shop-all-list"]/ul/li')
         for shop in shop_list:
+            shop_item=ShopItem()
             href=shop.xpath('./div/div[@class="tit"]/a/@href').extract()
             p=re.compile('\/(\d+)$')
             href=list_get_safe(href)
@@ -106,8 +108,23 @@ class dpSpider(Spider):
             environment=list_get_safe(comment_score,1,0)
             service=list_get_safe(comment_score,2,0)
             dishs=shop.xpath('./div/div[@class="recommend"]/a/text()').extract()
-            recommended_dish=reduce(lambda x,y:x+','+y,dishs)
+            if len(dishs)>1:
+                recommended_dish=reduce(lambda x,y:x+','+y,dishs)
+            else:
+                recommended_dish=list_get_safe(dishs,0,'')
 
+            shop_item['city']=city.encode('utf-8')
+            shop_item['shop_id']=shop_id.encode('utf-8')
+            shop_item['name']=name.encode('utf-8')
+            shop_item['type']=type.encode('utf-8')
+            shop_item['comment']=comment.encode('utf-8')
+            shop_item['address']=address.encode('utf-8')
+            shop_item['area']=area.encode('utf-8')
+            shop_item['taste']=float(taste)
+            shop_item['environment']=float(environment)
+            shop_item['service']=float(service)
+            shop_item['recommended_dish']=recommended_dish.encode('utf-8')
+            yield shop_item
 
 
 
