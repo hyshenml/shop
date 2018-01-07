@@ -16,3 +16,9 @@ def list_get_safe(l,n=0,default=''):
         return l[n]
     except IndexError,e:
         return default
+
+def safe_int(v):
+    try:
+        return int(v)
+    except ValueError,e:
+        return 0
