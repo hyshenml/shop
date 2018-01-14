@@ -25,7 +25,7 @@ DOWNLOADER_MIDDLEWARES = {
     #'scrapy.downloadermiddleware.useragent.MyUserAgentMiddleware': 1,
     #'shop.middlewares.MyUserAgentMiddleware': 400,
    #'shop.middlewares.MyproxiesSpiderMiddleware':125,
-   'shop.middlewares.data5uproxiesSpiderMiddleware':120
+   #'shop.middlewares.data5uproxiesSpiderMiddleware':120
 }
 
 HTTPERROR_ALLOWED_CODES = [403]
