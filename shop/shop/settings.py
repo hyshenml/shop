@@ -10,7 +10,7 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = 'shop'
-DB_NAME='dp'
+DB_NAME='huxiu'
 
 ITEM_PIPELINES={
 
@@ -39,7 +39,7 @@ ROBOTSTXT_OBEY = False
 IPPOOL=[
    #  {"ipaddr":"14.29.92.8:80"},
    # {"ipaddr":"114.212.87.98:1080"},
-    {"ipaddr":"222.94.146.157:58710"}
+    #{"ipaddr":"222.94.146.157:58710"}
 
 
 ]
@@ -88,7 +88,7 @@ MY_USER_AGENT = [
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 0.1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16

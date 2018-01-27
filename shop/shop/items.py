@@ -49,5 +49,22 @@ class ShopItem(scrapy.Item):
     recommended_dish=scrapy.Field(type='VARCHAR(64)')
 
 
+class ArticleItem(scrapy.Item):
+    title=scrapy.Field(type='VARCHAR(255)',pk=1)
+    time=scrapy.Field(type='datetime')
+    store_num=scrapy.Field(type='int')
+    comment_num=scrapy.Field(type='int')
+    text=scrapy.Field(type='text')
+    author_id=scrapy.Field(type='VARCHAR(64)')
+
+class AuthorItem(scrapy.Item):
+    author_id=scrapy.Field(type='VARCHAR(64)',pk=1)
+    author_name=scrapy.Field(type='VARCHAR(64)')
+    author_intro=scrapy.Field(type='VARCHAR(255)')
+    author_works_num = scrapy.Field(type='int')
+
+
 createTable(urlItem.fields,urlItem.__name__)
 createTable(ShopItem.fields,ShopItem.__name__)
+createTable(ArticleItem.fields,ArticleItem.__name__)
+createTable(AuthorItem.fields,AuthorItem.__name__)
