@@ -9,8 +9,6 @@ class targetManager():
         for url_data in urls:
             t=target()
             t.setType(url_data['type'])
-            if url_data['type']=='city':
-                url_data['url']=url_data['url']+'/food'
             t.setUrl(url_data['url'])
             res.append(t)
         return res
@@ -33,7 +31,7 @@ def query_urls():
     res={'url':'http://www.dianping.com/citylistguonei?redir=aHR0cDovL3d3dy5kaWFucGluZy5jb20v','type':'root'}
     return [res]
 
-def query_urls2(limit=16000):
+def query_urls2(limit=34000):
     sql = "select * from urlItem where last_parse_time=0 order by target_type desc limit %d;"%limit
     res=[]
     with MyDb() as conn:

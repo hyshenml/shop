@@ -16,9 +16,10 @@ class dpSpider(Spider):
       targets=targetManager.prepare_targets()
       for target in targets:
         callback=self._router_(target)
-        url=target.url
-
-        yield Request(url=target.url, callback=callback)
+        try:
+            yield Request(url=target.url, callback=callback)
+        except ValueError,e:
+            yield Request(url='http://'+target.url, callback=callback,meta=target.url)
         #target.record_update_time()
 
     def _record_update_(self,url):
@@ -49,13 +50,14 @@ class dpSpider(Spider):
             try:
                 url=s.xpath('../@href').extract()
                 url=url[0][2:]
-                url_item['url']="http://"+url
+                url_item['url']="http://"+url+'/food'
                 url_item['target_type']='city'
                 url_item['last_parse_time']=0
                 yield url_item
             except Exception,e:
                 print e
         self._record_update_(response.url)
+
 
 
     def parse_city_food(self,response):
