@@ -23,5 +23,4 @@ def createTable(fields,table):
         fieldNames=reduce(lambda x,y:x+','+y,fields)
         pkNames=reduce(lambda x,y:x+','+y,pk)
         sql='CREATE TABLE IF NOT EXISTS %s (%s,primary key (%s));'%(table,fieldNames,pkNames)
-        print sql
         cursor.execute(sql)
